@@ -16,7 +16,7 @@ class UserRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        dd(config('database.connections.mongodb.dsn'));
+        // dd(config('database.connections.mongodb.dsn'));
         User::on('mongodb')->firstOrCreate(
     ['email' => 'admin@skillmongo.com'],
     [
