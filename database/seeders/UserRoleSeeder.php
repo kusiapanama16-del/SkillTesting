@@ -10,11 +10,13 @@ use Illuminate\Support\Facades\Hash;
 
 class UserRoleSeeder extends Seeder
 {
+    
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
+        dd(config('database.connections.mongodb.dsn'));
         User::on('mongodb')->firstOrCreate(
     ['email' => 'admin@skillmongo.com'],
     [
