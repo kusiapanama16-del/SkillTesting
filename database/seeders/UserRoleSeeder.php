@@ -15,22 +15,22 @@ class UserRoleSeeder extends Seeder
      */
     public function run(): void
     {
-         User::firstOrCreate(
-            ['email' => 'admin@skillmongo.com'],
-            [
-                'name' => 'Admin Root',
-                'password' => Hash::make('SkillVentura123!'),
-                'role' => 'admin',
-            ]
-        );
+        User::on('mongodb')->firstOrCreate(
+    ['email' => 'admin@skillmongo.com'],
+    [
+        'name' => 'Admin Root',
+        'password' => Hash::make('SkillVentura123!'),
+        'role' => 'admin',
+    ]
+);
 
-        User::firstOrCreate(
-            ['email' => 'mentor@skillmongo.com'],
-            [
-                'name' => 'Mentor Sample',
-                'password' => Hash::make('MentorVentura123!'),
-                'role' => 'mentor',
-            ]
-        );
+User::on('mongodb')->firstOrCreate(
+    ['email' => 'mentor@skillmongo.com'],
+    [
+        'name' => 'Mentor Sample',
+        'password' => Hash::make('MentorVentura123!'),
+        'role' => 'mentor',
+    ]
+);
     }
 }
