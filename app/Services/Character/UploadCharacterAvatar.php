@@ -9,15 +9,17 @@ use Illuminate\Filesystem\FilesystemAdapter;
 
 class UploadCharacterAvatar
 {
-    public function upload(UploadedFile $file): string
+     public function upload($file): string
     {
         $filename = 'char_' . Str::uuid() . '.' . $file->getClientOriginalExtension();
 
-        /** @var FilesystemAdapter $disk */
-        $disk = Storage::disk('cloud');
+        $path = Storage::disk('s3')->putFileAs(
+            'characters',
+            $file,
+            $filename,
+            'public'
+        );
 
-        $path = $disk->putFileAs('characters', $file, $filename);
-
-        return $disk->url($path);
+        return Storage::disk('s3')->url($path);
     }
 }
