@@ -65,9 +65,13 @@ export default function CharacterIndex({
                                     {/* Avatar */}
                                     <div className="relative z-10 flex justify-center">
                                         <img
-                                            src={`/${char.avatar}`}
+                                            src={char.avatar}
                                             alt={char.name}
                                             className="h-28 w-28 rounded-full object-cover shadow-lg ring-4 ring-slate-100 transition group-hover:scale-105 dark:ring-slate-800"
+                                            onError={(e) => {
+                                                e.currentTarget.src =
+                                                    '/images/fallback.png';
+                                            }}
                                         />
                                     </div>
 
