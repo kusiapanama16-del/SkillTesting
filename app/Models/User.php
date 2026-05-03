@@ -2,25 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use MongoDB\Laravel\Eloquent\Model;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Authenticatable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use App\Models\UserCharacter;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Auth\Passwords\CanResetPassword;
-
-
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use MongoDB\Laravel\Eloquent\Model;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use Authenticatable, HasFactory, Notifiable, TwoFactorAuthenticatable, CanResetPassword;
+    use Authenticatable, Authorizable, CanResetPassword, HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     protected $connection = 'mongodb';
+
     protected $collection = 'users';
 
     /**
@@ -35,6 +33,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'password',
         'role',
         'character_id',
+        'avatar',
     ];
 
     /**
@@ -57,6 +56,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected function casts(): array
     {
         return [
+            '_id' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
@@ -85,21 +85,48 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function hasCharacter(): bool
     {
-        return !is_null($this->character_id);
+        return ! is_null($this->character_id);
     }
 
     public function userStats()
     {
-        return $this->hasMany(UserStat::class, 'character_id', '_id');
+        return $this->hasMany(UserStat::class, 'user_id', '_id');
     }
 
-    public function courses()
+    public function mentorCareerGroups()
     {
-        return $this->belongsToMany(
-            Course::class,
-            'course_students',
-            'user_id',
-            'course_id'
-        );
+        return $this->hasMany(MentorCareerGroup::class, 'mentor_id', '_id');
+    }
+
+    public function courseStudents()
+    {
+        return $this->hasMany(CourseStudent::class, 'user_id', '_id');
+    }
+
+    public function activeCourse()
+    {
+        return $this->hasOne(CourseStudent::class, 'user_id', '_id')
+            ->whereIn('status', ['in_progress', 'In_progress', 'active'])
+            ->latest('updated_at');
+    }
+
+    const ROLE_ADMIN = 'admin';
+
+    const ROLE_MENTOR = 'mentor';
+
+    const ROLE_STUDENT = 'student';
+
+    public static function roles(): array
+    {
+        return [
+            self::ROLE_ADMIN,
+            self::ROLE_MENTOR,
+            self::ROLE_STUDENT,
+        ];
+    }
+
+    public function getRouteKeyName()
+    {
+        return '_id';
     }
 }

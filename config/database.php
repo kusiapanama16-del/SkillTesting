@@ -113,24 +113,17 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
-        // 'mongodb' => [
+        //         'mongodb' => [
         //     'driver' => 'mongodb',
-        //     'host' => env('DB_HOST', '127.0.0.1'),
-        //     'port' => (int) env('DB_PORT', 27017),
-        //     'database' => env('DB_DATABASE', 'laravel'),
-        //     'username' => null,
-        //     'password' => null,
+        //     'dsn' => env('DB_URI'),
+        //     'database' => 'lms_gam_rpg',
         // ],
-'mongodb' => [
-    'driver' => 'mongodb',
-    'dsn' => env('DB_URI'),
-    'database' => 'lms_gam_rpg',
-],
-        // 'mongodb' => [
-        //     'driver'   => 'mongodb',
-        //     'dsn'      => env('MONGODB_URI'),
-        //     'database' => env('MONGODB_DATABASE'),
-        // ],
+
+        'mongodb' => [
+            'driver' => 'mongodb',
+            'dsn' => env('MONGODB_URI'),
+            'database' => env('MONGODB_DATABASE'),
+        ],
 
     ],
 

@@ -2,28 +2,17 @@
 
 namespace App\Actions\ModuleContent;
 
-use App\Models\ModuleContent;
+use App\Models\Module;
+use App\Services\Module\ModuleContentService;
 
 class CreateModuleContentAction
 {
+    public function __construct(
+        protected ModuleContentService $service
+    ) {}
 
-    public function execute(array $data): ModuleContent
+    public function execute(Module $module, array $data)
     {
-
-        $order = ModuleContent::where('module_id', $data['module_id'])->max('order');
-
-        return ModuleContent::create([
-
-            'module_id' => $data['module_id'],
-
-            'type' => $data['type'],
-
-            'content' => $data['content'],
-
-            'order' => ($order ?? 0) + 1
-
-        ]);
-
+        return $this->service->createSingle($module, $data);
     }
-
 }

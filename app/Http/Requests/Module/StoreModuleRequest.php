@@ -2,30 +2,21 @@
 
 namespace App\Http\Requests\Module;
 
+use App\Models\Module;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreModuleRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return auth()->user()?->isAdmin();
+        return $this->user()?->can('manage', Module::class) ?? false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-    public function rules(): array
+    public function rules()
     {
         return [
-
-            'path_id' => ['required', 'string'],
-
-            'title' => ['required', 'string', 'max:255']
+            'path_id' => 'required|string',
+            'title' => 'required|string',
         ];
     }
 }

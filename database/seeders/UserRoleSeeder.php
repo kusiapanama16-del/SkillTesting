@@ -2,37 +2,33 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-
 
 class UserRoleSeeder extends Seeder
 {
-    
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        // dd(config('database.connections.mongodb.dsn'));
-        User::on('mongodb')->firstOrCreate(
-    ['email' => 'admin@skillmongo.com'],
-    [
-        'name' => 'Admin Root',
-        'password' => Hash::make('SkillVentura123!'),
-        'role' => 'admin',
-    ]
-);
+        User::firstOrCreate(
+            ['email' => 'admin@skillmongo.com'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('SkillVentura123!'),
+                'role' => 'admin',
+            ]
+        );
 
-User::on('mongodb')->firstOrCreate(
-    ['email' => 'mentor@skillmongo.com'],
-    [
-        'name' => 'Mentor Sample',
-        'password' => Hash::make('MentorVentura123!'),
-        'role' => 'mentor',
-    ]
-);
+        User::firstOrCreate(
+            ['email' => 'mentor@skillmongo.com'],
+            [
+                'name' => 'Mentor Sample',
+                'password' => Hash::make('MentorVentura123!'),
+                'role' => 'mentor',
+            ]
+        );
     }
 }

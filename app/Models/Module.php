@@ -7,6 +7,7 @@ use MongoDB\Laravel\Eloquent\Model;
 class Module extends Model
 {
     protected $connection = 'mongodb';
+
     protected $collection = 'modules';
 
     protected $fillable = [
@@ -14,7 +15,8 @@ class Module extends Model
         'type',
         'title',
         'slug',
-        'order'
+        'order',
+        'created_by',
     ];
 
     public function path()
@@ -33,8 +35,13 @@ class Module extends Model
         return $this->hasOne(Quiz::class, 'module_id', '_id');
     }
 
+    public function badge()
+    {
+        return $this->belongsTo(LevelBadge::class, 'badge_id', '_id');
+    }
+
     public function getRouteKeyName()
     {
-        return 'slug';
+        return '_id';
     }
 }
